@@ -1,0 +1,9 @@
+python 3.13.4
+numpy 2.5.3
+scipy 1.18.1
+scikit-learn 1.9.1
+matplotlib 3.11.2
+esig 1.0.0
+roughpy 0.3.0
+pysiglib 4.0.0
+iisignature: not installable on Python 3.13/Windows (no wheel, build failed); esig used instead
