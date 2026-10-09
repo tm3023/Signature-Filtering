@@ -1,0 +1,85 @@
+{
+  "params": {
+    "h": 1.0,
+    "gamma": 1.5,
+    "T": 2.0,
+    "n_steps": 2000,
+    "N": 6000,
+    "n_train": 4000,
+    "seed": 1,
+    "M_max": 8,
+    "pf_paths": 20,
+    "pf_particles": 20000
+  },
+  "n_train": 4000,
+  "n_test": 2000,
+  "var_target_test": 3.5566719005359877,
+  "nonlinear_share_floor": 0.012465474137782592,
+  "rows": [
+    {
+      "M": 1,
+      "n_linear_words": 1,
+      "n_full": 2,
+      "rel_mse_restricted": 0.14353344872574236,
+      "rel_mse_full_ridge": 0.14353374529699925,
+      "ridge_alpha": 0.31622776601683794
+    },
+    {
+      "M": 2,
+      "n_linear_words": 2,
+      "n_full": 6,
+      "rel_mse_restricted": 0.013521531490294007,
+      "rel_mse_full_ridge": 0.013514135197396164,
+      "ridge_alpha": 3.1622776601683795e-09
+    },
+    {
+      "M": 3,
+      "n_linear_words": 3,
+      "n_full": 14,
+      "rel_mse_restricted": 0.012519251173065703,
+      "rel_mse_full_ridge": 0.006648103116878995,
+      "ridge_alpha": 3.1622776601683795
+    },
+    {
+      "M": 4,
+      "n_linear_words": 4,
+      "n_full": 30,
+      "rel_mse_restricted": 0.012484775341093695,
+      "rel_mse_full_ridge": 0.0026157744711637217,
+      "ridge_alpha": 10.0
+    },
+    {
+      "M": 5,
+      "n_linear_words": 5,
+      "n_full": 62,
+      "rel_mse_restricted": 0.012487136254429758,
+      "rel_mse_full_ridge": 0.0016796815785118941,
+      "ridge_alpha": 31.622776601683793
+    },
+    {
+      "M": 6,
+      "n_linear_words": 6,
+      "n_full": 126,
+      "rel_mse_restricted": 0.01249079212523249,
+      "rel_mse_full_ridge": 0.0007840894912480023,
+      "ridge_alpha": 3.1622776601683795e-09
+    },
+    {
+      "M": 7,
+      "n_linear_words": 7,
+      "n_full": 254,
+      "rel_mse_restricted": 0.012527853035467641,
+      "rel_mse_full_ridge": 0.0004310321244335794,
+      "ridge_alpha": 10.0
+    },
+    {
+      "M": 8,
+      "n_linear_words": 8,
+      "n_full": 510,
+      "rel_mse_restricted": 0.012528507872604728,
+      "rel_mse_full_ridge": 0.0003276963062718758,
+      "ridge_alpha": 1e-07
+    }
+  ],
+  "dry_run": false
+}
