@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+# Large regenerable cache (python d2_benes_prepare.py)
+results/d2_benes/cache.npz
+# LaTeX build artefacts
+notes/*.aux
+notes/*.log
+notes/*.out
+notes/*.fdb_latexmk
+notes/*.fls
+notes/*.synctex.gz
