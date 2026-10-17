@@ -40,3 +40,7 @@ python -m venv .venv && .venv/Scripts/python -m pip install -r requirements.txt
 ```
 
 Signatures are computed with `esig` (`iisignature` had no Python 3.13 Windows wheel), on piecewise-linear interpolations of paths sampled at dt = 1e-3.
+
+## Licence
+
+MIT (see `LICENSE`).
