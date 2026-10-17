@@ -44,3 +44,7 @@ Signatures are computed with `esig` (`iisignature` had no Python 3.13 Windows wh
 ## Licence
 
 MIT (see `LICENSE`).
+
+## Use of AI tools
+
+Parts of this repository (experiment code, scripts, documentation) were written with the help of an AI coding assistant (Claude, Anthropic), working to my specification and decisions; commits co-authored by the assistant are marked "Co-Authored-By: Claude". I chose the experiments, checked the results and am responsible for the conclusions.
