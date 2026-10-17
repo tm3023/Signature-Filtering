@@ -28,7 +28,7 @@ Setup: the closed form was checked against a 20,000-particle filter (RMSE 0.014,
 
 ## Note
 
-`notes/kalman_bucy_signature.tex`: the representation in this notation, a norm-equivalence lemma, and truncation bounds for the OU case (in progress).
+A write-up with proofs of truncation bounds for the Ornstein–Uhlenbeck case is in preparation.
 
 ## Reproduce
 

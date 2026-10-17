@@ -9,3 +9,6 @@ notes/*.out
 notes/*.fdb_latexmk
 notes/*.fls
 notes/*.synctex.gz
+
+# Working notes (proofs in progress) are kept local until ready
+notes/
