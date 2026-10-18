@@ -9,6 +9,13 @@ notes/*.out
 notes/*.fdb_latexmk
 notes/*.fls
 notes/*.synctex.gz
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.synctex.gz
+paper/build.log
 
 # Working notes (proofs in progress) are kept local until ready
 notes/

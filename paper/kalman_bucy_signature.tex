@@ -1,0 +1,392 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[round,authoryear]{natbib}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\providecommand{\doi}[1]{doi:\href{https://doi.org/#1}{\nolinkurl{#1}}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Sig}{S}
+\newcommand{\wy}{\mathtt y}
+\newcommand{\wt}{\mathtt t}
+
+\title{Truncation error of the signature representation\\ of the Kalman--Bucy filter}
+\author{Tamearon Mullings}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a scalar Ornstein--Uhlenbeck signal observed in continuous time, the Kalman--Bucy filter
+mean is a linear functional of the signature of the time-augmented observation path
+\citep{cohen2023}. Bounds on the error made by truncating this representation are left open
+there. In the constant-gain case we prove two-sided bounds for two choices of coefficients.
+With the exact series coefficients the error decays like $(\lambda T)^M/M!$ in the truncation
+level $M$. With coefficients chosen optimally at each level it is governed by the best $L^2$
+polynomial approximation of the filter kernel, and decays like $(\lambda T/4)^M/M!$ up to a
+factor polynomial in $M$. Both results agree with simulations, and a Bene\v{s} example
+shows that the picture changes for nonlinear filters.
+\end{abstract}
+
+% ======================================================================
+\section{Introduction}
+
+The signature of a path, the collection of its iterated integrals, gives a linear basis for
+functionals of the path \citep{lyons1998}. \citet{cohen2023} show that the Kalman--Bucy filter
+\citep{kalman1961} is a linear function of the initial estimate and of the signature of the
+time-augmented observation path, so that linear regression on signature features can recover
+the optimal linear filter. In practice the signature is truncated at a finite level $M$, and
+\citet[App.~H.3]{cohen2023} note that bounding the resulting approximation error is an open
+problem. This note gives explicit, two-sided bounds in the simplest setting: a scalar
+Ornstein--Uhlenbeck (OU) signal with the filter started at its steady state.
+
+% ======================================================================
+\section{Model and notation}
+
+Fix $T>0$ and let $W,V$ be independent standard Brownian motions. The signal and observation are
+\begin{align}
+  dX_t &= -aX_t\,dt + \sigma\,dW_t, & X_0 &\sim \mathcal N(0,P_\infty),\label{eq:signal}\\
+  dY_t &= hX_t\,dt + \gamma\,dV_t, & Y_0 &= 0,\label{eq:obs}
+\end{align}
+with $a,\sigma,h,\gamma>0$ and $X_0$ independent of $(W,V)$. Here $P_\infty$ is the positive root of the
+algebraic Riccati equation
+\begin{equation}\label{eq:are}
+  \sigma^2 - 2aP - \tfrac{h^2}{\gamma^2}P^2 = 0,
+  \qquad\text{so}\qquad
+  P_\infty = \frac{\gamma^2}{h^2}\Big(\!-a+\sqrt{a^2+h^2\sigma^2/\gamma^2}\Big).
+\end{equation}
+We write
+\[
+  K=\frac{P_\infty h}{\gamma^2},\qquad \lambda = a+Kh=\sqrt{a^2+h^2\sigma^2/\gamma^2},\qquad
+  k(u)=Ke^{-\lambda u},\qquad c_X=\max\Big\{P_\infty,\ \frac{\sigma^2}{2a}\Big\}.
+\]
+The second expression for $\lambda$ follows from \eqref{eq:are}.
+For $f\in L^2[0,T]$ let $\|f\|^2=\int_0^T f(u)^2\,du$, let
+$I(f)=\int_0^T f(T-s)\,dY_s$, let $\mathcal P_n$ be the polynomials of degree at most $n$, and let
+$E_n(f)=\min_{p\in\mathcal P_n}\|f-p\|$.
+
+\paragraph{Signatures.} The time-augmented path is $\hat Y_t=(t,Y_t)$, with letters $\wt$ and $\wy$.
+The signature coordinate of a word $w=w_1\cdots w_n$ on $[0,s]$ is defined recursively by
+$\Sig^{\varnothing}_{0,s}=1$ and
+$\Sig^{w_1\cdots w_n}_{0,s}=\int_0^s \Sig^{w_1\cdots w_{n-1}}_{0,u}\,d\hat Y^{w_n}_u$
+\citep{lyons1998}. Only the words $\wy\,\wt^{\,j}$ (one $\wy$ followed by $j$ letters $\wt$) are needed.
+For these, the only integral against $Y$ has integrand $1$, so It\^o and Stratonovich
+conventions coincide.
+
+% ======================================================================
+\section{The signature representation}
+
+\begin{lemma}\label{lem:words}
+For $j\ge0$ and $s\in[0,T]$,
+$\displaystyle \Sig^{\wy\wt^{j}}_{0,s}=\int_0^s\frac{(s-u)^j}{j!}\,dY_u$. In particular
+$\Sig^{\wy\wt^{j}}_{0,T}=I\big(u^j/j!\big)$.
+\end{lemma}
+
+\begin{proof}
+For $j=0$ both sides equal $Y_s$. For $j\ge1$ the recursion gives
+$\Sig^{\wy\wt^{j}}_{0,s}=\int_0^s \Sig^{\wy\wt^{j-1}}_{0,u}\,du$, a pathwise Riemann integral. Iterating
+it with Cauchy's formula for repeated integration gives
+$\Sig^{\wy\wt^{j}}_{0,s}=\int_0^s \frac{(s-u)^{j-1}}{(j-1)!}\,Y_u\,du$. Put
+$\phi(u)=-(s-u)^j/j!$, so $\phi'(u)=(s-u)^{j-1}/(j-1)!$. Since $\phi$ is deterministic and $C^1$,
+integration by parts \citep[Ch.~II]{protter2005} gives
+\[
+  \int_0^s \phi'(u)Y_u\,du=\phi(s)Y_s-\phi(0)Y_0-\int_0^s\phi(u)\,dY_u=\int_0^s\frac{(s-u)^j}{j!}\,dY_u,
+\]
+using $\phi(s)=0$ and $Y_0=0$.
+\end{proof}
+
+\begin{lemma}[Norm equivalence]\label{lem:norm}
+For every $f\in L^2[0,T]$,
+\[
+  \gamma^2\|f\|^2\;\le\;\E\big[I(f)^2\big]\;\le\;\big(\gamma^2+h^2Tc_X\big)\|f\|^2 .
+\]
+\end{lemma}
+
+\begin{proof}
+Let $g(s)=f(T-s)$, so $\int_0^Tg^2=\|f\|^2$. By \eqref{eq:obs}, $I(f)=hA+\gamma B$ with
+$A=\int_0^T g(s)X_s\,ds$ and $B=\int_0^T g(s)\,dV_s$. $A$ is a functional of $(X_0,W)$ and $B$ of $V$,
+so they are independent. Since $\E B=0$, $\E[AB]=0$. The It\^o isometry gives $\E B^2=\|f\|^2$,
+hence $\E I(f)^2=h^2\E A^2+\gamma^2\|f\|^2$, which proves the lower bound.
+From \eqref{eq:signal}, $X_t=e^{-at}X_0+\sigma\int_0^te^{-a(t-r)}dW_r$, so
+\[
+  \E X_t^2=e^{-2at}P_\infty+\big(1-e^{-2at}\big)\frac{\sigma^2}{2a}\le c_X ,
+\]
+a convex combination of $P_\infty$ and $\sigma^2/2a$. Minkowski's integral inequality and
+Cauchy--Schwarz then give
+$(\E A^2)^{1/2}\le\int_0^T|g(s)|(\E X_s^2)^{1/2}ds\le\sqrt{c_X}\int_0^T|g|\le\sqrt{c_XT}\,\|f\|$,
+which proves the upper bound.
+\end{proof}
+
+\begin{proposition}[\citealp{cohen2023}, Thm.~1, constant-gain case]\label{prop:rep}
+$\displaystyle m_T:=\E\big[X_T\mid\mathcal F^Y_T\big]=I(k)=\sum_{j\ge0}K(-\lambda)^j\,\Sig^{\wy\wt^{j}}_{0,T}$,
+with the series converging in $L^2(\mathbb P)$.
+\end{proposition}
+
+\begin{proof}
+The Kalman--Bucy filter \citep{kalman1961,bain2009} for \eqref{eq:signal}--\eqref{eq:obs} is
+$dm_t=-am_t\,dt+P_th\gamma^{-2}(dY_t-hm_t\,dt)$, with $\dot P_t=\sigma^2-2aP_t-h^2\gamma^{-2}P_t^2$,
+$m_0=0$ and $P_0=P_\infty$. Since $P_\infty$ is a fixed point of the Riccati equation,
+$P_t\equiv P_\infty$ and $dm_t=-\lambda m_t\,dt+K\,dY_t$. Applying It\^o's product rule to
+$e^{\lambda t}m_t$ gives $m_T=\int_0^TKe^{-\lambda(T-s)}dY_s=I(k)$.
+Let $k_M(u)=K\sum_{j<M}(-\lambda u)^j/j!$. By Lemma~\ref{lem:words} and linearity,
+$I(k_M)=\sum_{j<M}K(-\lambda)^j\Sig^{\wy\wt^{j}}_{0,T}$. Taylor's theorem gives
+$\sup_{[0,T]}|k-k_M|\le K(\lambda T)^M/M!\to0$, so $\|k-k_M\|\to0$, and by
+Lemma~\ref{lem:norm} $\E[(m_T-I(k_M))^2]\to0$.
+\end{proof}
+
+% ======================================================================
+\section{Truncation with the exact coefficients}
+
+Let $m^{(M)}_T=\sum_{j<M}K(-\lambda)^j\Sig^{\wy\wt^{j}}_{0,T}=I(k_M)$, the representation truncated at
+signature level $M$, and $r_M=k-k_M$.
+
+\begin{theorem}\label{thm:taylor}
+For every $M\ge1$,
+\[
+  \E\big[(m_T-m^{(M)}_T)^2\big]\le\big(\gamma^2+h^2Tc_X\big)\,
+  \frac{K^2\lambda^{2M}T^{2M+1}}{(2M+1)(M!)^2}.
+\]
+If moreover $M+1>\lambda T$, then
+$\E[(m_T-m^{(M)}_T)^2]\ge\gamma^2\big(1-\tfrac{\lambda T}{M+1}\big)^2\frac{K^2\lambda^{2M}T^{2M+1}}{(2M+1)(M!)^2}$.
+\end{theorem}
+
+\begin{proof}
+For $x\ge0$, the Lagrange form of the remainder gives
+$\big|e^{-x}-\sum_{j<M}(-x)^j/j!\big|=e^{-\xi}x^M/M!\le x^M/M!$ for some $\xi\in(0,x)$. Hence
+$|r_M(u)|\le K(\lambda u)^M/M!$, and $\|r_M\|^2\le K^2\lambda^{2M}T^{2M+1}/\big((2M+1)(M!)^2\big)$.
+The upper bound follows from Lemma~\ref{lem:norm}, since $m_T-m_T^{(M)}=I(r_M)$.
+For the lower bound, write $r_M(u)/K=\sum_{j\ge M}(-1)^j\tau_j$ with $\tau_j=x^j/j!$ and $x=\lambda u$.
+If $x<M+1$, then $\tau_{j+1}/\tau_j=x/(j+1)<1$ for all $j\ge M$. The series is then alternating with
+decreasing terms, so $|r_M(u)|/K\ge\tau_M-\tau_{M+1}=\frac{x^M}{M!}\big(1-\frac{x}{M+1}\big)$.
+For $u\le T$ the last factor is at least $1-\lambda T/(M+1)>0$. Squaring, integrating and applying
+the lower half of Lemma~\ref{lem:norm} gives the claim.
+\end{proof}
+
+The bounds match up to constants, so the exact-coefficient error decays like $(\lambda T)^M/M!$.
+Their ratio between consecutive levels is $\rho^{\mathrm{T}}_M=\big(\lambda T/M\big)^2\,\frac{2M-1}{2M+1}$.
+
+% ======================================================================
+\section{Truncation with optimal coefficients}
+
+Let $\mathcal S_M=\operatorname{span}\{\Sig^{\wy\wt^{j}}_{0,T}:j<M\}$ and let $m^{(M,*)}_T$ be the
+$L^2(\mathbb P)$-orthogonal projection of $m_T$ onto $\mathcal S_M$. This is the best mean-square
+predictor built from these signature terms, and it is the quantity that least-squares
+regression on them estimates.
+
+\begin{theorem}\label{thm:opt}
+For every $M\ge1$,
+\[
+  \gamma^2E_{M-1}(k)^2\;\le\;\E\big[(m_T-m^{(M,*)}_T)^2\big]\;\le\;\big(\gamma^2+h^2Tc_X\big)E_{M-1}(k)^2 .
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:words}, $\mathcal S_M=\{I(p):p\in\mathcal P_{M-1}\}$, since the $u^j/j!$ with
+$j<M$ span $\mathcal P_{M-1}$. As $I$ is linear,
+$\E[(m_T-m_T^{(M,*)})^2]=\min_{p\in\mathcal P_{M-1}}\E[I(k-p)^2]$. Choosing $p$ as the $L^2[0,T]$-best
+approximation of $k$ and applying the upper half of Lemma~\ref{lem:norm} gives the upper bound.
+For any $p$, the lower half gives $\E I(k-p)^2\ge\gamma^2\|k-p\|^2\ge\gamma^2E_{M-1}(k)^2$.
+\end{proof}
+
+It remains to evaluate $E_n(k)$. Let $i_\ell$ denote the modified spherical Bessel function of
+the first kind, $i_\ell=\mathsf i^{(1)}_\ell$ in the notation of \citet[\S10.47]{dlmf}, and let
+$c=\lambda T/2$.
+
+\begin{lemma}[Best $L^2$ approximation of the kernel]\label{lem:legendre}
+For $n\ge0$,
+\[
+  E_n(k)^2=K^2e^{-2c}\,\frac T2\sum_{\ell>n}2(2\ell+1)\,i_\ell(c)^2 .
+\]
+Moreover, with $\theta_\ell=2(2\ell+1)\,c^{2\ell}/\big((2\ell+1)!!\big)^2$ and
+$q_n=c^2/\big((2n+3)(2n+5)\big)$, if $q_n<1$ then
+\[
+  \theta_{n+1}\;\le\;\frac{2}{T}\,K^{-2}e^{2c}E_n(k)^2\;\le\;\theta_{n+1}\,\frac{e^{c^2/(2n+5)}}{1-q_n}.
+\]
+\end{lemma}
+
+\begin{proof}
+The substitution $u=T(1-x)/2$ maps $x\in[-1,1]$ onto $u\in[0,T]$, maps $\mathcal P_n$ onto itself,
+and gives $k(u)=Ke^{-c}e^{cx}$ and $\|f\|^2=\frac T2\int_{-1}^1 f(u(x))^2dx$. So
+$E_n(k)=Ke^{-c}\sqrt{T/2}\,\mathcal E_n$, where $\mathcal E_n$ is the best $L^2[-1,1]$ error of
+$e^{cx}$ by $\mathcal P_n$.
+
+Rayleigh's expansion \citep[eq.~10.60.7]{dlmf} with $z=-\mathrm ic$, together with
+$\mathsf i^{(1)}_\ell(c)=\mathrm i^{-\ell}\mathsf j_\ell(\mathrm ic)$ \citep[eq.~10.47.12]{dlmf}
+and the parity of $\mathsf j_\ell$, gives the Legendre expansion
+$e^{cx}=\sum_{\ell\ge0}(2\ell+1)i_\ell(c)P_\ell(x)$. The Legendre polynomials are orthogonal with
+$\int_{-1}^1P_\ell^2=2/(2\ell+1)$, so the best approximation in $\mathcal P_n$ is the truncated series
+\citep[Ch.~17]{trefethen2019}, and $\mathcal E_n^2=\sum_{\ell>n}2(2\ell+1)i_\ell(c)^2$.
+
+For the bounds, $i_\ell(c)=c^\ell\sum_{r\ge0}\frac{(c^2/2)^r}{r!\,(2\ell+2r+1)!!}$
+\citep[eq.~10.53.3]{dlmf}. All terms are positive, and $(2\ell+2r+1)!!\ge(2\ell+1)!!\,(2\ell+3)^r$, so
+\[
+  \frac{c^\ell}{(2\ell+1)!!}\le i_\ell(c)\le\frac{c^\ell}{(2\ell+1)!!}\,e^{c^2/(2(2\ell+3))}.
+\]
+The lower bound follows by keeping only $\ell=n+1$. For the upper bound, $\theta_{\ell+1}/\theta_\ell=c^2/((2\ell+1)(2\ell+3))\le q_n$
+for $\ell\ge n+1$, so $\sum_{\ell>n}\theta_\ell\le\theta_{n+1}/(1-q_n)$. Also
+$e^{c^2/(2\ell+3)}\le e^{c^2/(2n+5)}$ for $\ell\ge n+1$.
+\end{proof}
+
+\begin{corollary}\label{cor:rate}
+With $n=M-1$, Theorem~\ref{thm:opt} and Lemma~\ref{lem:legendre} give
+\[
+  \gamma^2K^2e^{-\lambda T}\tfrac T2\,\theta_M\;\le\;\E\big[(m_T-m^{(M,*)}_T)^2\big]\;\le\;
+  \big(\gamma^2+h^2Tc_X\big)K^2e^{-\lambda T}\tfrac T2\,\theta_M\,\frac{e^{c^2/(2M+3)}}{1-q_{M-1}} .
+\]
+Since $(2M+1)!!=(2M+1)!/(2^MM!)$ and $(2M)!\sim4^M(M!)^2/\sqrt{\pi M}$, the root-mean-square
+error is of order $(\lambda T/4)^M/M!$ up to a factor polynomial in $M$. Compared with
+Theorem~\ref{thm:taylor} this is smaller by a factor of order $4^{-M}$. Consecutive levels shrink
+the mean-square error by $\rho^{*}_M=\theta_M/\theta_{M-1}=c^2/\big((2M-1)(2M+1)\big)\approx(\lambda T/4M)^2$.
+\end{corollary}
+
+% ======================================================================
+\section{Numerical verification}\label{sec:numerics}
+
+\paragraph{Setup.}
+\begin{itemize}
+  \item Parameters: $a=\sigma=h=1$, $\gamma=0.5$, $T=1$. Hence $P_\infty=0.3090$, $K=1.2361$,
+        $\lambda=\sqrt5=2.2361$, $c_X=0.5$, and $\gamma^2+h^2Tc_X=3\gamma^2$.
+  \item Simulation: $6000$ paths of \eqref{eq:signal}--\eqref{eq:obs} on an Euler grid with
+        $dt=10^{-3}$; $4000$ for fitting, $2000$ for testing.
+  \item Signatures: computed with \texttt{esig} on the piecewise-linear interpolation of $Y$, and
+        cross-checked against \texttt{pysiglib} (largest difference $2\times10^{-16}$). The target
+        is $I(k)$ evaluated on that interpolated path, which the signature series represents exactly.
+  \item Checks: the target agrees with a discrete-time Kalman filter to root-mean-square error
+        $1.7\times10^{-4}$.
+\end{itemize}
+Errors and bounds are reported as mean-square error divided by $\operatorname{Var}(m_T)=0.1651$ (test set).
+Code and raw output are in the repository (\texttt{d2\_kb\_signature.py},
+\texttt{results/d2/summary.json}).
+
+\begin{table}[h]
+\centering
+\caption{Exact coefficients (Theorem~\ref{thm:taylor}). The lower bound needs $M+1>\lambda T$.}
+\label{tab:taylor}
+\begin{tabular}{c c c c c c}
+\toprule
+$M$ & measured & lower bound & upper bound & measured ratio & $\rho^{\mathrm T}_M$ \\
+\midrule
+1 & $1.87$                & --                    & $1.16\times10^{1}$    & --     & --     \\
+2 & $1.65$                & $1.88\times10^{-1}$   & $8.67$                & 0.886  & 0.750  \\
+3 & $7.29\times10^{-1}$   & $2.23\times10^{-1}$   & $3.44$                & 0.441  & 0.397  \\
+4 & $1.90\times10^{-1}$   & $8.52\times10^{-2}$   & $8.37\times10^{-1}$   & 0.261  & 0.243  \\
+5 & $3.26\times10^{-2}$   & $1.80\times10^{-2}$   & $1.37\times10^{-1}$   & 0.172  & 0.164  \\
+6 & $3.96\times10^{-3}$   & $2.48\times10^{-3}$   & $1.61\times10^{-2}$   & 0.122  & 0.118  \\
+7 & $3.59\times10^{-4}$   & $2.46\times10^{-4}$   & $1.42\times10^{-3}$   & 0.091  & 0.088  \\
+8 & $2.52\times10^{-5}$   & $1.85\times10^{-5}$   & $9.81\times10^{-5}$   & 0.070  & 0.069  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Optimal coefficients (Theorem~\ref{thm:opt}, with $E_{M-1}(k)$ from Lemma~\ref{lem:legendre}).}
+\label{tab:opt}
+\begin{tabular}{c c c c c c c}
+\toprule
+$M$ & measured & lower bound & upper bound & measured ratio & $\frac{E_{M-1}^2}{E_{M-2}^2}$ & $\rho^{*}_M$ \\
+\midrule
+1 & $1.80\times10^{-1}$  & $1.42\times10^{-1}$  & $4.27\times10^{-1}$  & --     & --     & --     \\
+2 & $1.17\times10^{-2}$  & $1.06\times10^{-2}$  & $3.18\times10^{-2}$  & 0.0645 & 0.0745 & 0.0833 \\
+3 & $3.72\times10^{-4}$  & $3.59\times10^{-4}$  & $1.08\times10^{-3}$  & 0.0320 & 0.0338 & 0.0357 \\
+4 & $7.02\times10^{-6}$  & $6.90\times10^{-6}$  & $2.07\times10^{-5}$  & 0.0189 & 0.0192 & 0.0198 \\
+5 & $8.38\times10^{-8}$  & $8.53\times10^{-8}$  & $2.56\times10^{-7}$  & 0.0119 & 0.0124 & 0.0126 \\
+6 & $7.31\times10^{-10}$ & $7.34\times10^{-10}$ & $2.20\times10^{-9}$  & 0.0087 & 0.0086 & 0.0087 \\
+7 & $4.68\times10^{-12}$ & $4.65\times10^{-12}$ & $1.40\times10^{-11}$ & 0.0064 & 0.0063 & 0.0064 \\
+8 & $2.10\times10^{-14}$ & $2.26\times10^{-14}$ & $6.79\times10^{-14}$ & 0.0045 & 0.0049 & 0.0049 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Exact coefficients (Table~\ref{tab:taylor}).} Every measured error lies inside the bounds
+of Theorem~\ref{thm:taylor}. The level-to-level ratios approach $\rho^{\mathrm T}_M$ (0.070 against
+0.069 at $M=8$).
+
+\paragraph{Optimal coefficients (Table~\ref{tab:opt}).} Here the coefficients are fitted by least
+squares on the $4000$ training paths. The measured errors sit almost exactly on the lower bound, so
+the observation-noise term dominates the constant in Lemma~\ref{lem:norm}. Two entries ($M=5,8$) fall
+$1.7\%$ and $7\%$ below the lower bound. The bound concerns the continuous-time population error,
+while the table reports a $2000$-path test-set estimate on a time grid; at $M=8$ the relative error
+is also near $10^{-14}$, where floating-point effects in the least-squares fit matter. The ratios
+match $E_{M-1}^2/E_{M-2}^2$ and approach $\rho^*_M\approx(\lambda T/4M)^2$. At $M=8$ the error is
+about $10^{9}$ times smaller than with the exact coefficients.
+
+% ======================================================================
+\section{Outlook: a nonlinear filter}\label{sec:outlook}
+
+For the Bene\v{s} model $dX_t=\tanh(X_t)\,dt+dW_t$, $dY_t=X_t\,dt+\gamma\,dV_t$, $X_0=0$
+\citep{benes1981}, the filter is finite-dimensional. Since $\tanh'+\tanh^2=1$, Girsanov's theorem
+gives the posterior as $\cosh(x)$ times the Gaussian Kalman--Bucy posterior of a Brownian signal.
+Its mean is therefore $m_T+P_T\tanh(m_T)$, where $m_T=\int_0^T\sinh(hs/\gamma)\,dY_s/(\gamma\cosh(hT/\gamma))$
+and $P_T=(\gamma/h)\tanh(hT/\gamma)$. Again $m_T$ is a single-$\wy$ signature functional.
+
+In simulations with $\gamma=1.5$ and $T=2$ ($6000$ paths; the closed form agrees with a
+$20{,}000$-particle filter to root-mean-square error $0.014$ against a target standard deviation of
+$1.91$):
+\begin{itemize}
+  \item Least squares on the words $\wy\wt^{j}$ stops at $1.25\times10^{-2}$ (relative mean-square
+        error) from $M=3$ onwards. This is exactly the share of the target's variance that is
+        nonlinear in $m_T$.
+  \item Ridge regression on the full truncated signature goes below this floor:
+        $6.6\times10^{-3}$, $2.6\times10^{-3}$, $1.7\times10^{-3}$ and $7.8\times10^{-4}$ for
+        $M=3,\dots,6$. That is roughly a factor of 2 per level. For $M\ge7$ the error is limited by
+        the training-set size.
+\end{itemize}
+Bounding this slower, geometric rate requires words with several $\wy$, where the It\^o and
+Stratonovich lifts differ, and polynomial approximation of $\tanh$ composed with a Gaussian
+functional. This is left for future work.
+
+\section*{Acknowledgement}
+The numerical experiments and the typesetting of this note were carried out with the assistance
+of an AI coding assistant (Claude, Anthropic). The derivations were worked through and checked
+by the author.
+
+% ======================================================================
+\begin{thebibliography}{9}
+\bibitem[Bain and Crisan(2009)]{bain2009}
+Bain, A. and Crisan, D. (2009) \emph{Fundamentals of Stochastic Filtering}. New York: Springer.
+\doi{10.1007/978-0-387-76896-0}.
+
+\bibitem[Bene\v{s}(1981)]{benes1981}
+Bene\v{s}, V.E. (1981) `Exact finite-dimensional filters for certain diffusions with nonlinear
+drift', \emph{Stochastics}, 5(1--2), pp.~65--92. \doi{10.1080/17442508108833174}.
+
+\bibitem[Cohen et~al.(2023)]{cohen2023}
+Cohen, S.N., Mantoan, G., Nesheim, L., de Paula, \'A., Turrell, A. and Yang, L. (2023)
+`Nowcasting using regression on signatures', \emph{arXiv preprint} arXiv:2305.10256 [v3].
+Available at: \url{https://arxiv.org/abs/2305.10256} (Accessed: 18 October 2026).
+
+\bibitem[Kalman and Bucy(1961)]{kalman1961}
+Kalman, R.E. and Bucy, R.S. (1961) `New results in linear filtering and prediction theory',
+\emph{Journal of Basic Engineering}, 83(1), pp.~95--108. \doi{10.1115/1.3658902}.
+
+\bibitem[Lyons(1998)]{lyons1998}
+Lyons, T.J. (1998) `Differential equations driven by rough signals', \emph{Revista Matem\'atica
+Iberoamericana}, 14(2), pp.~215--310. \doi{10.4171/RMI/240}.
+
+\bibitem[Olver et~al.(2026)]{dlmf}
+Olver, F.W.J., Olde Daalhuis, A.B., Lozier, D.W., Schneider, B.I., Boisvert, R.F., Clark, C.W.,
+Miller, B.R., Saunders, B.V., Cohl, H.S. and McClain, M.A. (eds.) (2026) \emph{NIST Digital Library
+of Mathematical Functions}. Release 1.2.8 of 2026-09-15. Available at: \url{https://dlmf.nist.gov/}
+(Accessed: 18 October 2026).
+
+\bibitem[Protter(2005)]{protter2005}
+Protter, P.E. (2005) \emph{Stochastic Integration and Differential Equations}. 2nd edn. Berlin:
+Springer. \doi{10.1007/978-3-662-10061-5}.
+
+\bibitem[Trefethen(2019)]{trefethen2019}
+Trefethen, L.N. (2019) \emph{Approximation Theory and Approximation Practice}. Extended edn.
+Philadelphia: SIAM. \doi{10.1137/1.9781611975949}.
+\end{thebibliography}
+
+\end{document}

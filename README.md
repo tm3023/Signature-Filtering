@@ -10,10 +10,10 @@ Setup: 6,000 simulated paths. The filter mean was checked against a discrete Kal
 
 | Coefficients | Held-out MSE / Var, M = 1 → 8 | Decay per signature level |
 |---|---|---|
-| exact series coefficients, truncated | 1.87 → 2.5e-5 | ≈ (λT/(M+1))² (Taylor remainder) |
-| least-squares re-fit on the words (y, tʲ) | 1.8e-1 → 2.1e-14 | ≈ **(λT/4M)²** (best polynomial approximation of the kernel) |
+| exact series coefficients, truncated | 1.87 → 2.5e-5 | ≈ (λT/M)²(2M−1)/(2M+1) (Taylor remainder) |
+| least-squares re-fit on the words (y, tʲ) | 1.8e-1 → 2.1e-14 | ≈ c²/((2M−1)(2M+1)) ≈ **(λT/4M)²**, c = λT/2 (best polynomial approximation of the kernel) |
 
-The re-fit rate matches (λT/4M)² closely for M = 2, …, 8.
+Both rates are proved, with two-sided bounds, in the note below. The measured errors lie within the bounds for M = 1, …, 8, apart from two re-fit points (M = 5, 8) that fall slightly below the lower bound; the note explains why.
 
 ![OU truncation](results/d2/truncation.png)
 
@@ -28,7 +28,7 @@ Setup: the closed form was checked against a 20,000-particle filter (RMSE 0.014,
 
 ## Note
 
-A write-up with proofs of truncation bounds for the Ornstein–Uhlenbeck case is in preparation.
+[`paper/kalman_bucy_signature.pdf`](paper/kalman_bucy_signature.pdf) (source: `paper/kalman_bucy_signature.tex`) proves two-sided bounds on the truncation error for the Ornstein–Uhlenbeck case, for both the exact and the optimal coefficients. It also compares the bounds with the simulations above.
 
 ## Reproduce
 
